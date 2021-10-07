@@ -1,0 +1,67 @@
+%! TEX program = xelatex
+% Please make sure you insert your
+% data according to the instructions in PoSauthmanual.pdf
+\documentclass[a4paper,11pt]{article}
+\usepackage{pos}
+
+\title{HMC with Normalizing Flows}
+%% \ShortTitle{Short Title for header}
+
+\author*[a]{Sam Foreman}
+\author[b, c]{Taku Izubuchi}
+\author[d]{Luchang Jin}
+\author[a]{Xiao-Yong Jin}
+\author[a]{James C. Osborn}
+\author[b]{Akio Tomiya}
+
+\affiliation[a]{Argonne National Laboratory,\\
+  Lemont, IL 60439}
+
+\affiliation[b]{RIKEN,\\
+ 2-1 Hirosawa, Wako, Saitama, 351-0198, Japan}
+
+\affiliation[c]{Brookhaven National Laboratory,\\
+ Upton, NY 11973}
+
+\affiliation[d]{Dept. of Physics, University of Connecticut,\\
+ Storrs, CT 06269}
+
+\emailAdd{foremans@anl.gov}
+\emailAdd{izubuchi@bnl.gov}
+\emailAdd{luchang.jin@uconn.edu}
+\emailAdd{xjin@anl.gov}
+\emailAdd{osborn@alcf.anl.gov}
+
+\abstract{%
+    We propose using Normalizing Flows as a trainable kernel within the
+    molecular dynamics update of Hamiltonian Monte Carlo (HMC).
+    %
+    By learning (invertible) transformations that simplify our dynamics, we can
+    outperform traditional methods at generating independent configurations.
+    %
+    We show that, using a carefully constructed network architecture, our
+    approach can be easily scaled to large lattice volumes with minimal
+    retraining effort.
+}
+
+\FullConference{%
+  *** FIXME: Name of conference, ***\\
+  *** FIXME: day-day Month YEAR ***\\
+  *** FIXME: Location, City, Country ***
+}
+
+%% \tableofcontents
+
+\begin{document}
+\maketitle
+
+
+\section{...}
+
+\begin{thebibliography}{99}
+\bibitem{...}
+....
+
+\end{thebibliography}
+
+\end{document}
