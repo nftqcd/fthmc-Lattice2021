@@ -59,7 +59,28 @@
 \maketitle
 
 
-\section{...}
+\section{Introduction}
+For a random variable \(z\) with a given distribution \(z \sim r(z)\), and an
+invertible function \(x = f(z)\) with \(z = f^{-1}(x)\), we can use the change
+of variables formula to write
+%
+\begin{equation}
+    p(x) = r(z)\left|\det\frac{\partial z}{\partial x}\right| =
+    r(f^{-1}(x))\left|\det\frac{\partial f^{-1}}{\partial x}\right|
+\end{equation}
+%
+where \(r(z)\) is the (simple) prior density, and our goal is to generate
+independent samples from the (difficult) target distribution \(p(x)\).
+%
+This can be done using \emph{normalizing flows} to construct a model density
+\(q(x)\) that approximates the target distribution, i.e. \(q(\cdot)\simeq
+p(\cdot)\) for a suitably-chosen flow \(f\).
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{assets/flow_model.pdf}
+    \caption{\label{fig:flow_model} Using a flow to generate data \(x'\). Image adapted from~\cite{}}  % TODO: Fill in citations
+\end{figure}
 
 \begin{thebibliography}{99}
 \bibitem{...}
