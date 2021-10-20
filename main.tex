@@ -63,6 +63,7 @@
 For a random variable \(z\) with a given distribution \(z \sim r(z)\), and an
 invertible function \(x = f(z)\) with \(z = f^{-1}(x)\), we can use the change
 of variables formula to write
+\marginpar{\color{red}{cite: change of variables}}
 %
 \begin{equation}
     p(x) = r(z)\left|\det\frac{\partial z}{\partial x}\right| =
@@ -95,6 +96,9 @@ complimentary ``frozen'' variables.
 \subsection{\label{subsec:coupling_layers}Affine Coupling Layers}
 A particularly useful template function for constructing our normalizing flows
 is the affine coupling layer,
+\marginpar{\color{red}[norm flows]}
+\marginpar{\color{red}[aff layer]}
+\marginpar{\color{red}[RealNVP]}
 %
 \begin{align*}
     f(x_{1}, x_{2}) &= \left(e^{s(x_2)}x_{1} + t(x_{2}),\, x_{2}\right),
@@ -112,6 +116,7 @@ In order to effectively draw samples from the correct target distribution
 %
 To do so, we use the (reverse) Kullback-Leibler (KL) divergence from
 Eq.~\ref{eq:kl_div}, which is minimized when \(p=q\).
+\marginpar{\color{red}{[KL-div]}}
 %
 \begin{align}
     \label{eq:kl_div}
