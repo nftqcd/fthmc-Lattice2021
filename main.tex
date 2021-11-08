@@ -1,4 +1,5 @@
 \documentclass[a4paper,11pt]{article}
+
 \usepackage{pos}
 \usepackage{pgfplots}
 \usepackage{wrapfig}
@@ -8,6 +9,8 @@
 
 \title{HMC with Normalizing Flows}
 %% \ShortTitle{Short Title for header}
+
+% TODO: Add citations !!
 
 \author*[a]{Sam Foreman}
 \author[b, c]{Taku Izubuchi}
@@ -136,11 +139,11 @@ Eq.~\ref{eq:kl_div}, which is minimized when \(p=q\).
     \item Evolve the joint system \(\xi=(\dot x, \dot v)\) according to
         Hamilton's equations along \(H=\text{const.}\) via the following updates (leapfrog
         integrator):
-        \begin{enumerate}
-            \item \(\tilde{v} \leftarrow v - \frac{\varepsilon}{2}\partial_{x}S(x)\)
-            \item \(x' \longleftarrow x + \varepsilon \tilde{v}\)
-            \item \(v' \leftarrow \tilde{v} - \frac{\varepsilon}{2}\partial_{x} S(x')\)
-        \end{enumerate}
+        % \begin{equation}
+        %     \text{ (a.)  } \(\tilde{v} \leftarrow v - \frac{\varepsilon}{2}\partial_{x}S(x)\)\quad
+        %     \text{ (b.)  } \(x' \longleftarrow x + \varepsilon \tilde{v}\)\quad
+        %     \text{ (c.)  } \(v' \leftarrow \tilde{v} - \frac{\varepsilon}{2}\partial_{x} S(x')\)
+        % \end{equation}
     \item Accept or reject the proposal configuration using the
         Metropolis-Hastings test,
         \begin{equation}
@@ -189,7 +192,7 @@ J(z)\right| = \text{const.}\), and our expectation value simplifies to
     \langle\mathcal{O}\rangle = 
     \frac{1}{\mathcal{Z}^{\ast}}\int dz\, \mathcal{O}(f(z)), \text{ where }
     \frac{1}{\mathcal{Z}^{\ast}} 
-    = \frac{1}{\mathcal{Z}}\exp(-\text{const.})
+    = \frac{1}{\mathcal{Z}}\exp(-\text{const.}).
 \end{equation}
 %
 \section{\label{sec:hmc_nf}HMC with Normalizing Flows}
@@ -259,7 +262,8 @@ For a given lattice configuration, we can define the topological charge \(Q\in\m
     Q = \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P})\text{ where } \mathrm{arg}(x_{P})\in[-\pi,\pi].
 \end{equation}
 %
-We are interested in how this quantity evolves over a finite length Markov chain, and in particular, we can define the tunneling rate, \(\delta Q\) as
+We are interested in how this quantity evolves over a finite length Markov
+chain, and in particular, we can define the tunneling rate, \(\delta Q\) as
 %
 \begin{equation}
     \delta Q = \sqrt{\left(Q_{i+1} - Q_{i}\right)^{2}}
@@ -267,7 +271,20 @@ We are interested in how this quantity evolves over a finite length Markov chain
 %
 where the difference is between subsequent states in the chain.
 %
+\section{\label{sec:results}Results}
 
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.45\textwidth]{assets/fthmc_dq_live_8x8_beta7.png}
+    \caption{\label{fig:fthmc_dq_8x8_beta7}Plot of the tunneling rate on an
+    \(8\times8\) lattice at \(\beta = 7\).}
+\end{figure}
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.45\textwidth]{assets/fthmc_dq_live_16x16_xfer_beta7.png}
+    \caption{\label{fig:fthmc_dq_8x8_beta7}Plot of the tunneling rate on an
+    \(16 \times 16\) lattice at \(\beta = 7\).}
+\end{figure}
 
 
 
