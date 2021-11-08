@@ -66,7 +66,6 @@
 For a random variable \(z\) with a given distribution \(z \sim r(z)\), and an
 invertible function \(x = f(z)\) with \(z = f^{-1}(x)\), we can use the change
 of variables formula to write
-\marginpar{\color{red}{cite: change of variables}}
 %
 \begin{equation}
     p(x) = r(z)\left|\det\frac{\partial z}{\partial x}\right| =
@@ -76,16 +75,17 @@ of variables formula to write
 where \(r(z)\) is the (simple) prior density, and our goal is to generate
 independent samples from the (difficult) target distribution \(p(x)\).
 %
-This can be done using \emph{normalizing flows} to construct a model density
-\(q(x)\) that approximates the target distribution, i.e. \(q(\cdot)\simeq
-p(\cdot)\) for a suitably-chosen flow \(f\).
+This can be done using \emph{normalizing flows}~\cite{rezende2015variational}
+to construct a model density \(q(x)\) that approximates the target
+distribution, i.e. \(q(\cdot)\simeq p(\cdot)\) for a suitably-chosen flow
+\(f\).
 
 \begin{figure}[htpb]
     \centering
     \includegraphics[width=\textwidth]{assets/flow_model.pdf}
     % \includegraphics[width=\textwidth]{assets/flow_model.pdf}
     \caption{\label{fig:flow_model} Using a flow to generate data \(x'\). Image
-    adapted from~\cite{}}  % TODO: Fill in citations
+    adapted from~\cite{weng2018flow}}
 \end{figure}
 %
 We can construct a normalizing flow by composing multiple invertible functions
@@ -94,11 +94,11 @@ f_{K}\right](z)\).
 %
 In practice, the functions \(f_{i}\) are usually implemented as \emph{coupling
 layers}, which update an ``active'' subset of the variables, conditioned on the
-complimentary ``frozen'' variables.
+complimentary ``frozen'' variables~\cite{Kanwar:2020xzo,Albergo:2021vyo}.
 %
 \subsection{\label{subsec:coupling_layers}Affine Coupling Layers}
 A particularly useful template function for constructing our normalizing flows
-is the affine coupling layer,
+is the affine coupling layer~\cite{DinhSB16,rezende2015variational},
 \marginpar{\color{red}[norm flows]}
 \marginpar{\color{red}[aff layer]}
 \marginpar{\color{red}[RealNVP]}
@@ -129,33 +129,6 @@ Eq.~\ref{eq:kl_div}, which is minimized when \(p=q\).
         \,\,\text{where}\,\, y_{i}\sim q
 \end{align}
 %
-\subsection{\label{subsec:hmc}Hamiltonian Monte Carlo (HMC)}
-\begin{enumerate}
-    \item Introduce \(v \sim \mathcal{N} (0,\mathbb{I}_{n}) \in \mathbb{R}^{n}\)
-        and write the joint distribution as
-        \begin{equation}
-            p(x, v) = p(x) p(v) \propto e^{-S(x)} e^{-\frac{1}{2} v^{T} v}
-        \end{equation}
-    \item Evolve the joint system \(\xi=(\dot x, \dot v)\) according to
-        Hamilton's equations along \(H=\text{const.}\) via the following updates (leapfrog
-        integrator):
-        % \begin{equation}
-        %     \text{ (a.)  } \(\tilde{v} \leftarrow v - \frac{\varepsilon}{2}\partial_{x}S(x)\)\quad
-        %     \text{ (b.)  } \(x' \longleftarrow x + \varepsilon \tilde{v}\)\quad
-        %     \text{ (c.)  } \(v' \leftarrow \tilde{v} - \frac{\varepsilon}{2}\partial_{x} S(x')\)
-        % \end{equation}
-    \item Accept or reject the proposal configuration using the
-        Metropolis-Hastings test,
-        \begin{equation}
-            x_{i+1} = \begin{cases}
-                x' \text{ with probability } 
-                    A(\xi'|\xi) \equiv \min\left\{1, \frac{p(\xi')}{p(\xi)}%
-                    \left|\frac{\partial\xi'}{\partial\xi^{T}}\right|\right\}\\
-                x \text{ with probability } 1 - A(\xi'|\xi)
-            \end{cases}
-        \end{equation}
-\end{enumerate}
-
 \section{\label{sec:trivializing_map}Trivializing Map}
 %
 Our goal is to evaluate expectation values of the form
@@ -185,8 +158,9 @@ We require the Jacobian matrix, \(J(z)\), to be:
         continuous inverse)
 \end{enumerate}
 %
-The function \(f\) is a \emph{trivializing map} when \(S(f(z)) - \log\left|\det
-J(z)\right| = \text{const.}\), and our expectation value simplifies to
+The function \(f\) is a \emph{trivializing map}~\cite{luscher2009} when
+\(S(f(z)) - \log\left|\det J(z)\right| = \text{const.}\), and our expectation
+value simplifies to
 %
 \begin{equation}
     \langle\mathcal{O}\rangle = 
@@ -221,9 +195,9 @@ and we obtain the modified Hamiltonian
     \tilde{H}(x, \rho) = \frac{1}{2}\rho^{\dagger}\rho + S(x) - \log|\det J|.
 \end{equation}
 %
-As shown in Fig.~\ref{fig:fthmc}, we can use \(f^{-1}: z \rightarrow x\) to perform
-HMC updates on the transformed variables \(x\), and \(f: x \rightarrow z\) to
-recover the physical target distribution.
+As shown in Fig.~\ref{fig:fthmc}, we can use \(f^{-1}: z \rightarrow x\) to
+perform HMC updates on the transformed variables \(x\), and \(f: x \rightarrow
+z\) to recover the physical target distribution.
 %
 \begin{figure}[htpb]
     \centering
@@ -231,6 +205,35 @@ recover the physical target distribution.
     \caption{\label{fig:fthmc}Normalizing flow with inner HMC block.}
 \end{figure}
 %
+\subsection{\label{subsec:hmc}Hamiltonian Monte Carlo (HMC)}
+We describe the general procedure of the Hamiltonian Monte Carlo
+algorithm~\cite{Betancourt:2017}.
+\begin{enumerate}
+    \item Introduce \(v \sim \mathcal{N} (0,\mathbb{I}_{n}) \in \mathbb{R}^{n}\)
+        and write the joint distribution as
+        \begin{equation}
+            p(x, v) = p(x) p(v) \propto e^{-S(x)} e^{-\frac{1}{2} v^{T} v}
+        \end{equation}
+    \item Evolve the joint system \((\dot x, \dot v)\) according to
+        Hamilton's equations along \(H=\text{const.}\) using the leapfrog
+        integrator:
+        \begin{equation}
+            \textbf{ (a.)  } \tilde{v} \leftarrow v - \frac{\varepsilon}{2}\partial_{x}S(x)\quad
+            \textbf{ (b.)  } x' \leftarrow x + \varepsilon \tilde{v}\quad
+            \textbf{ (c.)  } v' \leftarrow \tilde{v} - \frac{\varepsilon}{2}\partial_{x} S(x')
+        \end{equation}
+    \item Accept or reject the proposal configuration using the
+        Metropolis-Hastings test,
+        \begin{equation}
+            x_{i+1} = \begin{cases}
+                x' \text{ with probability } 
+                    A(\xi'|\xi) \equiv \min\left\{1, \frac{p(\xi')}{p(\xi)}%
+                    \left|\frac{\partial\xi'}{\partial\xi^{T}}\right|\right\}\\
+                x \text{ with probability } 1 - A(\xi'|\xi)
+            \end{cases}
+        \end{equation}
+\end{enumerate}
+
 
 \section{%
     \label{sec:gauge_theory}%
@@ -250,17 +253,20 @@ We can write our target distribution \(p(x)\) in terms of the Wilson action
 \(S(x)\) as
 %
 \begin{equation}
-    p(x)\propto e^{-S(x)},\text{ where } S(x) \equiv \sum_{P} 1 - \cos x_{P}
+    p(x)\propto e^{-S(x)},\quad S(x) \equiv \sum_{P} 1 - \cos x_{P}
 \end{equation}
 %
 and \(x_{P} = x_{\mu}(n) + x_{\nu}(n+\hat{\mu}) - x_{\mu}(n+\hat{\nu}) -
 x_{\nu}(n)\), as shown in Fig.~\ref{fig:plaq}.
 %
-For a given lattice configuration, we can define the topological charge \(Q\in\mathbb{Z}\) as
+For a given lattice configuration, we can define the topological charge
+\(Q\in\mathbb{Z}\) as
 %
 \begin{equation}
-    Q = \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P})\text{ where } \mathrm{arg}(x_{P})\in[-\pi,\pi].
+    Q = \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P}),
 \end{equation}
+%
+where \(\mathrm{arg}(x_{P})\in[-\pi,\pi]\).
 %
 We are interested in how this quantity evolves over a finite length Markov
 chain, and in particular, we can define the tunneling rate, \(\delta Q\) as
@@ -271,29 +277,57 @@ chain, and in particular, we can define the tunneling rate, \(\delta Q\) as
 %
 where the difference is between subsequent states in the chain.
 %
+This quantity is analogous to the lag-one autocorrelation in the topological
+charge.
+%
 \section{\label{sec:results}Results}
-
+%
+For traditional HMC, we see in Fig~\ref{subfig:dqHMC8},\ref{subfig:dqHMC16}
+that \(\delta Q \simeq 0\) across all trajectories for both \(8\times 8\) and
+\(16\times 16\) lattice volumes.
+%
+Conversely, we see in Fig~\ref{subfig:dqftHMC8},\ref{subfig:dqftHMC16} that
+multiple tunneling events (characterized by \(\delta Q > 0\)) occur for both
+\(8 \times 8\) and \(16 \times 16\) volumes.
+%
 \begin{figure}[htpb]
     \centering
-    \includegraphics[width=0.45\textwidth]{assets/fthmc_dq_live_8x8_beta7.png}
-    \caption{\label{fig:fthmc_dq_8x8_beta7}Plot of the tunneling rate on an
-    \(8\times8\) lattice at \(\beta = 7\).}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{assets/dqHMC_8x8_beta7.pdf}
+        \caption{\label{subfig:dqHMC8}HMC, on \(8 \times 8\) lattice at
+            \(\beta = 7\)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{assets/fthmc_dq_live_8x8_beta7.png}
+        \caption{\label{subfig:dqftHMC8}HMC + Normalizing Flow, on \(8 \times
+        8\) lattice at \(\beta = 7\)}
+    \end{subfigure}
+% \end{figure}
+% \begin{figure}[htpb]
+%     \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{assets/dqHMC_16x16_beta7.pdf}
+        \caption{\label{subfig:dqHMC16}HMC, on \(16 \times 16\) lattice at
+        \(\beta = 7\)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{assets/fthmc_dq_live_16x16_xfer_beta7.png}
+        \caption{\label{subfig:dqftHMC16}HMC + Normalizing Flow, on
+        \(16 \times 16\) lattice at \(\beta = 7\)}
+    \end{subfigure}
 \end{figure}
-\begin{figure}[htpb]
-    \centering
-    \includegraphics[width=0.45\textwidth]{assets/fthmc_dq_live_16x16_xfer_beta7.png}
-    \caption{\label{fig:fthmc_dq_8x8_beta7}Plot of the tunneling rate on an
-    \(16 \times 16\) lattice at \(\beta = 7\).}
-\end{figure}
 
 
 
 
 
-\begin{thebibliography}{99}
-\bibitem{...}
-....
+% \begin{thebibliography}{99}
+\bibliography{main}
+\bibliographystyle{plain}
+% \bibitem{...}
 
-\end{thebibliography}
+% \end{thebibliography}
 
 \end{document}
