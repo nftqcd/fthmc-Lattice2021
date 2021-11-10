@@ -311,6 +311,24 @@ multiple tunneling events (characterized by \(\delta Q > 0\)) occur for both
         \(16 \times 16\) lattice at \(\beta = 7\)}
     \end{subfigure}
 \end{figure}
+%
+\subsection{\label{subsec:transfer}Transfer Learning}
+%
+We use gauge equivariant coupling layers that act on plaquettes as the
+base layer for our network architecture.
+%
+As in~\cite{Albergo:2021vyo}, these layers are composed of inner coupling
+layers which are implemented as stacks of convolutional layers.
+%
+One advantage of using convolutional layers is that we can re-use the trained
+weights when scaling up to larger lattice volumes.
+%
+Explicitly, when scaling up the lattice volume we can initialize the weights
+of our new network with the previously trained values.
+%
+This approach has the advantage of requiring minimal retraining effort while
+being able to efficiently generate models on large lattice volumes.
+
 
 
 % \begin{thebibliography}{99}
