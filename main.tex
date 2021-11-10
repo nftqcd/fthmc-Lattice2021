@@ -99,9 +99,6 @@ complimentary ``frozen'' variables~\cite{Kanwar:2020xzo,Albergo:2021vyo}.
 \subsection{\label{subsec:coupling_layers}Affine Coupling Layers}
 A particularly useful template function for constructing our normalizing flows
 is the affine coupling layer~\cite{DinhSB16,rezende2015variational},
-\marginpar{\color{red}[norm flows]}
-\marginpar{\color{red}[aff layer]}
-\marginpar{\color{red}[RealNVP]}
 %
 \begin{align*}
     f(x_{1}, x_{2}) &= \left(e^{s(x_2)}x_{1} + t(x_{2}),\, x_{2}\right),
@@ -119,7 +116,6 @@ In order to effectively draw samples from the correct target distribution
 %
 To do so, we use the (reverse) Kullback-Leibler (KL) divergence from
 Eq.~\ref{eq:kl_div}, which is minimized when \(p=q\).
-\marginpar{\color{red}{[KL-div]}}
 %
 \begin{align}
     \label{eq:kl_div}
