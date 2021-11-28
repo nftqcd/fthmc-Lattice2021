@@ -1,7 +1,8 @@
 \documentclass[a4paper,11pt]{article}
 
 \usepackage{pos}
-\usepackage{ulem}
+% \usepackage{ulem}
+\usepackage{cancel}
 \usepackage{pgfplots}
 \usepackage{wrapfig}
 \usepackage{subcaption}
@@ -265,19 +266,18 @@ For a given lattice configuration, we can define the topological charge
 %
 where \(\mathrm{arg}(x_{P})\in[-\pi,\pi]\).
 %
-We are interested in how this quantity evolves over a finite length Markov
-chain, \sout{%
-    and in particular, we can define the tunneling rate, \(\delta Q\) as%
-}
+\textcolor{blue}{We are interested in how this quantity evolves over a finite length Markov
+chain, and in particular, we can define the tunneling rate, \(\delta Q\) as}
+
 \marginpar{\color{red}{Remove references to \(\delta Q\)?}}
 %
 \begin{equation}
     \delta Q = \sqrt{\left(Q_{i+1} - Q_{i}\right)^{2}}
 \end{equation}
 %
-\sout{where the difference is between subsequent states in the chain.}
+\textcolor{blue}{where the difference is between subsequent states in the chain.}
 %
-\sout{This quantity is analogous to the lag-one autocorrelation in the
+\textcolor{blue}{This quantity is analogous to the lag-one autocorrelation in the
 topological charge.}
 %
 \section{\label{sec:results}Results}
@@ -301,8 +301,8 @@ multiple tunneling events (characterized by \(\delta Q > 0\)) occur for both
     % -----------------------------------------------
     \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=\textwidth]{assets/ess_loss_dkl_train.pdf}
-        \caption{\label{subfig:loss}Training loss
-        \(\beta = 7\). Note \(\delta Q \simeq 0\)}
+        \caption{\label{subfig:loss}Loss and ESS vs train epoch at \(\beta =
+        6\) on \(V = 8\times 8\) lattice.}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \includegraphics[width=\textwidth]{assets/histories_8x8_beta6.pdf}
