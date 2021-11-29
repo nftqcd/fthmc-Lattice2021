@@ -225,9 +225,9 @@ algorithm~\cite{Betancourt:2017}.
         \begin{equation}
             x_{i+1} = \begin{cases}
                 x' \text{ with probability } 
-                    A(\xi'|\xi) \equiv \min\left\{1, \frac{p(\xi')}{p(\xi)}%
-                    \left|\frac{\partial\xi'}{\partial\xi^{T}}\right|\right\}\\
-                x \text{ with probability } 1 - A(\xi'|\xi)
+                    A(x'|x) \equiv \min\left\{1, \frac{p(x')}{p(x)}%
+                    \left|\frac{\partial x'}{\partial x^{T}}\right|\right\}\\
+                x \text{ with probability } 1 - A(x'|x)
             \end{cases}
         \end{equation}
 \end{enumerate}
@@ -285,11 +285,8 @@ topological charge.}
 For traditional HMC, we see in Fig~\ref{subfig:q8},\ref{subfig:q16}
 that \(Q \simeq 0\) for across all trajectories for both \(8\times 8\) and
 \(16\times 16\) lattice volumes.
-\marginpar{\textcolor{blue}{Update text}}
 %
-Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that
-multiple tunneling events (characterized by \(\delta Q > 0\)) occur for both
-\(8 \times 8\) and \(16 \times 16\) volumes.
+Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that the trained models are able to sample from multiple values of \(Q\) for both the \(8\times 8\) and \(16\times16\) volumes.
 %
 \begin{figure}[htpb]
     \centering
@@ -321,11 +318,6 @@ multiple tunneling events (characterized by \(\delta Q > 0\)) occur for both
     \caption{\label{fig:histories}}
 \end{figure}
 %
-
-\textcolor{blue}{NOTE: The HMC data in Fig~\ref{subfig:q16} is incorrectly
-reusing the same data from the \(8\times8\) run in Fig~\ref{subfig:q8} (the
-Trained data is correct, however). I will update this soon.}
-
 \subsection{\label{subsec:volume_scaling}Volume Scaling}
 %
 We use gauge equivariant coupling layers that act on plaquettes as the
