@@ -300,53 +300,6 @@ algorithm~\cite{Betancourt:2017}.
             \end{cases}
         \end{equation}
 \end{enumerate}
-
-
-\section{\label{sec:results}Results}
-%
-For traditional HMC, we see in Fig~\ref{subfig:q8},\ref{subfig:q16}
-that \(Q \simeq 0\) for across all trajectories for both \(8\times 8\) and
-\(16\times 16\) lattice volumes.
-%
-Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that the trained
-models are able to sample from multiple values of \(Q\) for both the \(8\times
-8\) and \(16\times16\) volumes.
-%
-The results in Fig~\ref{subfig:loss} took \(\sim 4\) hours to train using a
-single A100 Nvidia GPU.
-%
-The source code for our implementation is publicly available on github at
-\href{https://www.github.com/nftqcd/fthmc}{github.com/nftqcd/fthmc}.
-
-\begin{figure}[htpb]
-    \centering
-    % \begin{subfigure}[b]{0.49\textwidth}
-    %     \includegraphics[width=\textwidth]{assets/dqHMC_8x8_beta7.pdf}
-    %     \caption{\label{subfig:dqHMC8}HMC, on \(8 \times 8\) lattice at
-    %         \(\beta = 7\). Note \(\delta Q \simeq 0\)}
-    % \end{subfigure}
-    % \hfill
-    % -----------------------------------------------
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{assets/ess_loss_dkl_train.pdf}
-        \caption{\label{subfig:loss}Loss and ESS vs train epoch at \(\beta =
-        6\) on \(V = 8\times 8\) lattice.}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{assets/histories_8x8_beta6.pdf}
-        \caption{\label{subfig:q8}\(x_{P}\) and \(Q\) histories for both HMC
-            and the trained model, at \(\beta = 6\) with \(V = 8 \times 8\)
-        lattice.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{assets/histories_16x16_beta6_xfr.pdf}
-        \caption{\label{subfig:q16}The same model from Fig~\ref{subfig:q8} used
-        to generate configurations on \(V = 16\times16\) lattice.}
-        % lattice, transferred from model trained on \(8\times8\) lattice. }
-    \end{subfigure}
-    \caption{\label{fig:histories}}
-\end{figure}
 %
 \subsection{\label{subsec:volume_scaling}Volume Scaling}
 %
@@ -364,7 +317,65 @@ of our new network with the previously trained values.
 %
 This approach has the advantage of requiring minimal retraining effort while
 being able to efficiently generate models on large lattice volumes.
+%
+\section{\label{sec:results}Results}
+%
+For traditional HMC, we see in Fig~\ref{subfig:q8},\ref{subfig:q16}
+that \(Q \simeq 0\) for across all trajectories for both \(8\times 8\) and
+\(16\times 16\) lattice volumes.
+%
+Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that the trained
+models are able to sample from multiple values of \(Q\) for both the \(8\times
+8\) and \(16\times16\) volumes.
+%
 
+The results in Fig~\ref{subfig:loss} took \(\sim 4\) hours to train using a
+single A100 Nvidia GPU.
+%
+The performance of the trained sampler is limited by the acceptance rate of the
+proposed configurations, which in turn, is ultimately limited by the
+computational resources used to train the model.
+%
+Because of this, we would expect a continued improvement in performance with
+additional training.
+%
+For this relatively simple proof of concept, however, we were able to
+demonstrate the usefuleness of our approach without requiring prohibitively
+large upfront training costs.
+%
+The source code for our implementation is publicly available on github at
+\href{https://www.github.com/nftqcd/fthmc}{github.com/nftqcd/fthmc}.
+%
+\begin{figure}[htpb]
+    \centering
+    % \begin{subfigure}[b]{0.49\textwidth}
+    %     \includegraphics[width=\textwidth]{assets/dqHMC_8x8_beta7.pdf}
+    %     \caption{\label{subfig:dqHMC8}HMC, on \(8 \times 8\) lattice at
+    %         \(\beta = 7\). Note \(\delta Q \simeq 0\)}
+    % \end{subfigure}
+    % \hfill
+    % -----------------------------------------------
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{assets/ess_loss_dkl_train.pdf}
+        \caption{\label{subfig:loss}Loss and Effective Sample
+        Size~\cite{2018arXiv180904129E} (ESS) vs train epoch at \(\beta = 6\)
+    on \(V = 8\times 8\) lattice.}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{assets/histories_8x8_beta6.pdf}
+        \caption{\label{subfig:q8}\(x_{P}\) and \(Q\) histories for both HMC
+            and the trained model, at \(\beta = 6\) with \(V = 8 \times 8\)
+        lattice.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{assets/histories_16x16_beta6_xfr.pdf}
+        \caption{\label{subfig:q16}The same model from Fig~\ref{subfig:q8} used
+        to generate configurations on \(V = 16\times16\) lattice.}
+    \end{subfigure}
+    \caption{\label{fig:histories}}
+\end{figure}
+%
 \section{\label{sec:ack}Acknowledgments}
 %
 This research was supported by the Exascale Computing Project (17-SC-20-SC), a
@@ -389,7 +400,6 @@ Results presented in this research were obtained using the Python
     seaborn_michael_waskom_2017_883859,
     ipython4160251%
 }
-
 % \begin{thebibliography}{99}
 \bibliography{main}
 \bibliographystyle{plain}
