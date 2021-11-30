@@ -65,6 +65,75 @@
 \begin{document}
 \maketitle
 \section{\label{sec:intro}Introduction}
+\subsection{%
+    \label{subsec:gauge_theory}%
+    2D \texorpdfstring{\(U(1)\)}{U(1)} Gauge Theory
+}
+%
+\begin{wrapfigure}{r}{.33\columnwidth}
+  \includegraphics[width=0.33\columnwidth]{assets/plaq.pdf}
+  \caption{\label{fig:plaq} Plaquette \(x_{P}\).}
+\end{wrapfigure}
+%
+Let \(U_{\mu}(n) = e^{i x_{\mu}(n)}\in U(1)\), with \(x_{\mu}(n)\in [-\pi,
+\pi]\) denote the \emph{link variables}, where \(x_{\mu}(n)\) is a link at the
+site \(n\) oriented in the direction \(\hat{\mu}\).
+%
+Our goal is to generate an ensemble of configurations, distributed according to
+% %
+% For the 2D \(U(1)\) gauge theory on a square lattice with periodic boundary
+% conditions, we can write the target distribution 
+% We can write our target distribution \(p(x)\) in terms of the Wilson action
+% \(S(x)\) as
+%
+\begin{equation}
+    p(x)\propto e^{-S(x)},\quad S(x) \equiv \sum_{P} 1 - \cos x_{P},
+\end{equation}
+%
+where $S(x)$ is the Wilson action for the 2D \(U(1)\) gauge
+theory\footnote{Explicitly, on a square lattice with periodic boundary
+conditions.}, and \(x_{P} = x_{\mu}(n) + x_{\nu}(n+\hat{\mu}) -
+x_{\mu}(n+\hat{\nu}) - x_{\nu}(n)\) is the sum of the links around the
+elementary plaquette as shown in Fig.~\ref{fig:plaq}.
+%
+For a given lattice configuration, we can define the topological charge as \(Q
+= \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P}) \in\mathbb{Z}\), where
+\(\mathrm{arg}(x_{P})\in [-\pi, \pi]\).
+% \begin{equation}
+%     Q = \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P}),\text{where}\quad
+%     \mathrm{arg}(x_{P})\in[-\pi,\pi].
+% \end{equation}
+%
+
+Traditional sampling techniques such as HMC are known to suffer from
+\emph{critical slowing down}~\cite{Schaefer:2010hu}, a phenomenon characterized
+by the freezing of the topological charge \(Q\) as we approach physical lattice
+spacings.
+%
+This effect can be seen clearly in Fig~\ref{subfig:q8}~\ref{subfig:q16}, where
+\(Q\) typically remains stuck for the duration of the HMC trajectories.
+%
+In this work we describe a method for training a normalizing flow model that is
+capable of sampling from different topological charge sectors, thereby reducing
+the computational effort required to generate independent configurations.
+%
+% The most commonly used approach, Hamiltonian Monte Carlo (HMC), is
+% This can be seen in the samplers inability to mix between different
+% \textcolor{blue}{We are interested in how this quantity evolves over a finite length Markov
+% chain, and in particular, we can define the tunneling rate, \(\delta Q\) as}
+
+% \marginpar{\color{red}{Remove references to \(\delta Q\)?}}
+% %
+% \begin{equation}
+%     \delta Q = \sqrt{\left(Q_{i+1} - Q_{i}\right)^{2}}
+% \end{equation}
+% %
+% \textcolor{blue}{where the difference is between subsequent states in the chain.}
+% %
+% \textcolor{blue}{This quantity is analogous to the lag-one autocorrelation in the
+% topological charge.}
+\subsection{\label{subsec:ft}Field Transformations}
+%
 For a random variable \(z\) with a given distribution \(z \sim r(z)\), and an
 invertible function \(x = f(z)\) with \(z = f^{-1}(x)\), we can use the change
 of variables formula to write
@@ -129,7 +198,7 @@ Eq.~\ref{eq:kl_div}, which is minimized when \(p=q\).
 %
 \section{\label{sec:trivializing_map}Trivializing Map}
 %
-Our goal is to evaluate expectation values of the form
+Ultimately, our goal is to evaluate expectation values of the form
 %
 \begin{equation}
     \label{eq:exp_val}
@@ -193,9 +262,9 @@ and we obtain the modified Hamiltonian
     \tilde{H}(x, \rho) = \frac{1}{2}\rho^{\dagger}\rho + S(x) - \log|\det J|.
 \end{equation}
 %
-As shown in Fig.~\ref{fig:fthmc}, we can use \(f^{-1}: z \rightarrow x\) to
-perform HMC updates on the transformed variables \(x\), and \(f: x \rightarrow
-z\) to recover the physical target distribution.
+As shown in Fig.~\ref{fig:fthmc}, we can use a \emph{field transformation},
+\(f^{-1}: z \rightarrow x\) to perform HMC updates on the transformed variables
+\(x\), and \(f: x \rightarrow z\) to recover the physical target distribution.
 %
 \begin{figure}[htpb]
     \centering
@@ -233,61 +302,22 @@ algorithm~\cite{Betancourt:2017}.
 \end{enumerate}
 
 
-\section{%
-    \label{sec:gauge_theory}%
-    2D \texorpdfstring{\(U(1)\)}{U(1)} Gauge Theory
-}
-%
-\begin{wrapfigure}{r}{.33\columnwidth}
-  \includegraphics[width=0.33\columnwidth]{assets/plaq.pdf}
-  \caption{\label{fig:plaq} Elementary plaquette \(x_{P}\) on the lattice.}
-\end{wrapfigure}
-%
-Let \(U_{\mu}(n) = e^{i x_{\mu}(n)}\in U(1)\), with \(x_{\mu}(n)\in [-\pi,
-\pi]\) denote the \emph{link variables}, where \(x_{\mu}(n)\) is a link at the
-site \(n\) oriented in the direction \(\hat{\mu}\).
-%
-We can write our target distribution \(p(x)\) in terms of the Wilson action
-\(S(x)\) as
-%
-\begin{equation}
-    p(x)\propto e^{-S(x)},\quad S(x) \equiv \sum_{P} 1 - \cos x_{P}
-\end{equation}
-%
-and \(x_{P} = x_{\mu}(n) + x_{\nu}(n+\hat{\mu}) - x_{\mu}(n+\hat{\nu}) -
-x_{\nu}(n)\), as shown in Fig.~\ref{fig:plaq}.
-%
-For a given lattice configuration, we can define the topological charge
-\(Q\in\mathbb{Z}\) as
-%
-\begin{equation}
-    Q = \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P}),
-\end{equation}
-%
-where \(\mathrm{arg}(x_{P})\in[-\pi,\pi]\).
-%
-\textcolor{blue}{We are interested in how this quantity evolves over a finite length Markov
-chain, and in particular, we can define the tunneling rate, \(\delta Q\) as}
-
-\marginpar{\color{red}{Remove references to \(\delta Q\)?}}
-%
-\begin{equation}
-    \delta Q = \sqrt{\left(Q_{i+1} - Q_{i}\right)^{2}}
-\end{equation}
-%
-\textcolor{blue}{where the difference is between subsequent states in the chain.}
-%
-\textcolor{blue}{This quantity is analogous to the lag-one autocorrelation in the
-topological charge.}
-%
 \section{\label{sec:results}Results}
 %
 For traditional HMC, we see in Fig~\ref{subfig:q8},\ref{subfig:q16}
 that \(Q \simeq 0\) for across all trajectories for both \(8\times 8\) and
 \(16\times 16\) lattice volumes.
 %
-Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that the trained models are able to sample from multiple values of \(Q\) for both the \(8\times 8\) and \(16\times16\) volumes.
+Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that the trained
+models are able to sample from multiple values of \(Q\) for both the \(8\times
+8\) and \(16\times16\) volumes.
 %
+The results in Fig~\ref{subfig:loss} took \(\sim 4\) hours to train using a
+single A100 Nvidia GPU.
+%
+The source code for our implementation is publicly available on github at
+\href{https://www.github.com/nftqcd/fthmc}{github.com/nftqcd/fthmc}.
+
 \begin{figure}[htpb]
     \centering
     % \begin{subfigure}[b]{0.49\textwidth}
@@ -335,6 +365,30 @@ of our new network with the previously trained values.
 This approach has the advantage of requiring minimal retraining effort while
 being able to efficiently generate models on large lattice volumes.
 
+\section{\label{sec:ack}Acknowledgments}
+%
+This research was supported by the Exascale Computing Project (17-SC-20-SC), a
+collaborative effort of the U.S. Department of Energy Office of Science and the
+National Nuclear Security Administration.
+%
+This research was performed using resources of the Argonne Leadership Computing
+Facility (ALCF), which is a DOE Office of Science User Facility supported under
+Contract DE\_AC02--06CH11357. 
+%
+This work describes objective technical results and analysis.
+%
+Any subjective views or opinions that might be expressed in the work do not
+necessarily represent the views of the U.S. DOE or the United States
+Government.
+%
+Results presented in this research were obtained using the Python
+\citep{van1995python}, programming language and its many data science libraries
+\cite{%
+    matplotlib,
+    numpyharris2020array,
+    seaborn_michael_waskom_2017_883859,
+    ipython4160251%
+}
 
 % \begin{thebibliography}{99}
 \bibliography{main}
