@@ -160,8 +160,8 @@ distribution, i.e. \(q(\cdot)\simeq p(\cdot)\) for a suitably-chosen flow
 \end{figure}
 %
 We can construct a normalizing flow by composing multiple invertible functions
-\(f_{i}\) so that \(x\equiv \left[f_{1}\odot f_{2}\odot \cdots \odot
-f_{K}\right](z)\).
+\(f_{i}\) so that \(x\equiv \left[f_{k}\circ f_{k-1}\circ \cdots \circ
+f_{2}\circ f_{1}\right](z)\).
 %
 In practice, the functions \(f_{i}\) are usually implemented as \emph{coupling
 layers}, which update an ``active'' subset of the variables, conditioned on the
@@ -238,8 +238,8 @@ value simplifies to
 %
 \section{\label{sec:hmc_nf}Field Transformation HMC: \texttt{fthmc}}
 %
-We can implement the trivializing map defined above using a normalizing flow
-model.
+We can implement the trivializing map defined in
+Sec.~\ref{sec:trivializing_map} using a normalizing flow model.
 %
 For conjugate momenta \(\pi\), we can write the Hamiltonian as
 %
@@ -348,32 +348,29 @@ The source code for our implementation is publicly available on github at
 %
 \begin{figure}[htpb]
     \centering
-    % \begin{subfigure}[b]{0.49\textwidth}
-    %     \includegraphics[width=\textwidth]{assets/dqHMC_8x8_beta7.pdf}
-    %     \caption{\label{subfig:dqHMC8}HMC, on \(8 \times 8\) lattice at
-    %         \(\beta = 7\). Note \(\delta Q \simeq 0\)}
-    % \end{subfigure}
-    % \hfill
-    % -----------------------------------------------
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{assets/ess_loss_dkl_train.pdf}
-        \caption{\label{subfig:loss}Loss and Effective Sample
-        Size~\cite{2018arXiv180904129E} (ESS) vs train epoch at \(\beta = 6\)
-    on \(V = 8\times 8\) lattice.}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{assets/histories_8x8_beta6.pdf}
-        \caption{\label{subfig:q8}\(x_{P}\) and \(Q\) histories for both HMC
-            and the trained model, at \(\beta = 6\) with \(V = 8 \times 8\)
-        lattice.}
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\linewidth]{assets/histories_8x8_beta6.pdf}
+        \caption{\label{subfig:q8}The average plaquette \(x_{P}\) and
+            topological charge \(Q\) histories for the trained model and
+        HMC at \(\beta = 6\) with \(V = 8 \times 8\).}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{assets/histories_16x16_beta6_xfr.pdf}
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\linewidth]{assets/histories_16x16_beta6_xfr.pdf}
         \caption{\label{subfig:q16}The same model from Fig~\ref{subfig:q8} used
         to generate configurations on \(V = 16\times16\) lattice.}
     \end{subfigure}
-    \caption{\label{fig:histories}}
+    \caption{\label{fig:histories}Comparison of lattice observables for both
+        HMC and the trained model at \(V = 8\times 8\), and \(V =
+    16\times16\).}
+\end{figure}
+    % \begin{subfigure}[b]{\linewidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{assets/ess_loss_dkl_train.pdf}
+    \caption{\label{subfig:loss}Loss and Effective Sample
+        Size~\cite{2018arXiv180904129E} (ESS) vs train epoch at \(\beta = 6\)
+    on \(V = 8\times 8\) lattice.}
 \end{figure}
 %
 \section{\label{sec:ack}Acknowledgments}
