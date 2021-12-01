@@ -1,7 +1,8 @@
+%!TEX program = xelatex
 \documentclass[a4paper,11pt]{article}
-
 \usepackage{pos}
 % \usepackage{ulem}
+\usepackage{natbib}
 \usepackage{cancel}
 \usepackage{pgfplots}
 \usepackage{wrapfig}
@@ -49,16 +50,17 @@
     We show that, using a carefully constructed network architecture, our
     approach can be easily scaled to large lattice volumes with minimal
     retraining effort.
+    %
+    The source code for our implementation is publicly available online at
+    \href{https://www.github.com/nftqcd/fthmc}{github.com/nftqcd/fthmc}.
 }
 
 \FullConference{%
-  % *** FIXME: Name of conference, ***\\
-  % *** FIXME: day-day Month YEAR ***\\
-  % *** FIXME: Location, City, Country ***
-  The 38th International Symposium on Lattice Field Theory\\
-  26-30 July 2021\\
-  Zoom / Gather @ MIT, Cambridge MA, USA\\
+ The 38th International Symposium on Lattice Field Theory, LATTICE2021
+  26th-30th July, 2021
+  Zoom/Gather@Massachusetts Institute of Technology
 }
+
 
 %% \tableofcontents
 
@@ -94,7 +96,7 @@ where $S(x)$ is the Wilson action for the 2D \(U(1)\) gauge
 theory\footnote{Explicitly, on a square lattice with periodic boundary
 conditions.}, and \(x_{P} = x_{\mu}(n) + x_{\nu}(n+\hat{\mu}) -
 x_{\mu}(n+\hat{\nu}) - x_{\nu}(n)\) is the sum of the links around the
-elementary plaquette as shown in Fig.~\ref{fig:plaq}.
+elementary plaquette as shown in Figure~\ref{fig:plaq}.
 %
 For a given lattice configuration, we can define the topological charge as \(Q
 = \frac{1}{2\pi}\sum_{P}\mathrm{arg}(x_{P}) \in\mathbb{Z}\), where
@@ -110,8 +112,8 @@ Traditional sampling techniques such as HMC are known to suffer from
 by the freezing of the topological charge \(Q\) as we approach physical lattice
 spacings.
 %
-This effect can be seen clearly in Fig~\ref{subfig:q8}~\ref{subfig:q16}, where
-\(Q\) typically remains stuck for the duration of the HMC trajectories.
+This effect can be seen clearly in Figure~\ref{subfig:q8},~\ref{subfig:q16},
+where \(Q\) typically remains stuck for the duration of the HMC trajectories.
 %
 In this work we describe a method for training a normalizing flow model that is
 capable of sampling from different topological charge sectors, thereby reducing
@@ -262,7 +264,7 @@ and we obtain the modified Hamiltonian
     \tilde{H}(x, \rho) = \frac{1}{2}\rho^{\dagger}\rho + S(x) - \log|\det J|.
 \end{equation}
 %
-As shown in Fig.~\ref{fig:fthmc}, we can use a \emph{field transformation},
+As shown in Figure~\ref{fig:fthmc}, we can use a \emph{field transformation},
 \(f^{-1}: z \rightarrow x\) to perform HMC updates on the transformed variables
 \(x\), and \(f: x \rightarrow z\) to recover the physical target distribution.
 %
@@ -293,10 +295,10 @@ algorithm~\cite{Betancourt:2017}.
         Metropolis-Hastings test,
         \begin{equation}
             x_{i+1} = \begin{cases}
-                x' \text{ with probability } 
+                x', \text{ with probability } 
                     A(x'|x) \equiv \min\left\{1, \frac{p(x')}{p(x)}%
                     \left|\frac{\partial x'}{\partial x^{T}}\right|\right\}\\
-                x \text{ with probability } 1 - A(x'|x)
+                x, \text{ with probability } 1 - A(x'|x)
             \end{cases}
         \end{equation}
 \end{enumerate}
@@ -320,16 +322,16 @@ being able to efficiently generate models on large lattice volumes.
 %
 \section{\label{sec:results}Results}
 %
-For traditional HMC, we see in Fig~\ref{subfig:q8},\ref{subfig:q16}
+For traditional HMC, we see in Figure~\ref{subfig:q8},\ref{subfig:q16}
 that \(Q \simeq 0\) for across all trajectories for both \(8\times 8\) and
 \(16\times 16\) lattice volumes.
 %
-Conversely, we see in Fig~\ref{subfig:q8},\ref{subfig:q16} that the trained
+Conversely, we see in Figure~\ref{subfig:q8},\ref{subfig:q16} that the trained
 models are able to sample from multiple values of \(Q\) for both the \(8\times
 8\) and \(16\times16\) volumes.
 %
 
-The results in Fig~\ref{subfig:loss} took \(\sim 4\) hours to train using a
+The results in Figure~\ref{subfig:loss} took \(\sim 4\) hours to train using a
 single A100 Nvidia GPU.
 %
 The performance of the trained sampler is limited by the acceptance rate of the
@@ -339,12 +341,9 @@ computational resources used to train the model.
 Because of this, we would expect a continued improvement in performance with
 additional training.
 %
-For this relatively simple proof of concept, however, we were able to
+For this relatively simple proof of concept, we were able to
 demonstrate the usefuleness of our approach without requiring prohibitively
 large upfront training costs.
-%
-The source code for our implementation is publicly available on github at
-\href{https://www.github.com/nftqcd/fthmc}{github.com/nftqcd/fthmc}.
 %
 \begin{figure}[htpb]
     \centering
@@ -357,8 +356,8 @@ The source code for our implementation is publicly available on github at
     \hfill
     \begin{subfigure}[b]{\linewidth}
         \includegraphics[width=\linewidth]{assets/histories_16x16_beta6_xfr.pdf}
-        \caption{\label{subfig:q16}The same model from Fig~\ref{subfig:q8} used
-        to generate configurations on \(V = 16\times16\) lattice.}
+        \caption{\label{subfig:q16}The same model from Figure~\ref{subfig:q8}
+        used to generate configurations on \(V = 16\times16\) lattice.}
     \end{subfigure}
     \caption{\label{fig:histories}Comparison of lattice observables for both
         HMC and the trained model at \(V = 8\times 8\), and \(V =
@@ -367,7 +366,7 @@ The source code for our implementation is publicly available on github at
     % \begin{subfigure}[b]{\linewidth}
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{assets/ess_loss_dkl_train.pdf}
+    \includegraphics[width=\linewidth]{assets/ess_loss_dkl_train1.pdf}
     \caption{\label{subfig:loss}Loss and Effective Sample
         Size~\cite{2018arXiv180904129E} (ESS) vs train epoch at \(\beta = 6\)
     on \(V = 8\times 8\) lattice.}
@@ -397,8 +396,8 @@ Results presented in this research were obtained using the Python
 }
 %
 % \begin{thebibliography}{99}
+\bibliographystyle{JHEP}
 \bibliography{main}
-\bibliographystyle{plain}
 % \bibitem{...}
 
 % \end{thebibliography}
